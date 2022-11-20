@@ -28,8 +28,8 @@ Each component is set up to run on a different port on localhost, in a separate 
   ![Error loading client-js.png](./protectedResource-js.png)
 
 All of the applications have been set up to serve static files such as images and Cascading Style Sheets (CSS). These
-are included in the `files` directory. In addition, there are HTML templates in the `files` directory. These are used
-in the applications to generate HTML pages based on variable inputs. When templates are used, they are set up at the
+are included in the `files` directory. In addition, there are HTML templates in the `files` directory. These are used in 
+the applications to generate HTML pages based on variable inputs. When templates are used, they are set up at the
 beginning of the application with the following code:
 
 ```javascript
