@@ -216,25 +216,25 @@ app.post("/token", function(req, res){
         nosql.find().make(function(builder) {
             builder.where('refresh_token', req.body.refresh_token);
             builder.callback(function(err, tokens) {
-                  if (tokens.length == 1) {
-                      var token = tokens[0];
-                      if (token.client_id != clientId) {
-                          console.log('Invalid client using a refresh token, expected %s got %s', token.client_id, clientId);
-                          nosql.remove().make(function(builder) { builder.where('refresh_token', req.body.refresh_token); });
-                          res.status(400).end();
-                          return
-                      }
-                      console.log("We found a matching refresh token: %s", req.body.refresh_token);
-                      var access_token = randomstring.generate();
-                      var token_response = { access_token: access_token, token_type: 'Bearer',  refresh_token: req.body.refresh_token };
-                      nosql.insert({ access_token: access_token, client_id: clientId });
-                      console.log('Issuing access token %s for refresh token %s', access_token, req.body.refresh_token);
-                      res.status(200).json(token_response);
-                      return;
-                  } else {
-                      console.log('No matching token was found.');
-                      res.status(401).end();
-                  }
+                if (tokens.length == 1) {
+                    var token = tokens[0];
+                    if (token.client_id != clientId) {
+                        console.log('Invalid client using a refresh token, expected %s got %s', token.client_id, clientId);
+                        nosql.remove().make(function(builder) { builder.where('refresh_token', req.body.refresh_token); });
+                        res.status(400).end();
+                        return
+                    }
+                    console.log("We found a matching refresh token: %s", req.body.refresh_token);
+                    var access_token = randomstring.generate();
+                    var token_response = { access_token: access_token, token_type: 'Bearer',  refresh_token: req.body.refresh_token };
+                    nosql.insert({ access_token: access_token, client_id: clientId });
+                    console.log('Issuing access token %s for refresh token %s', access_token, req.body.refresh_token);
+                    res.status(200).json(token_response);
+                    return;
+                } else {
+                    console.log('No matching token was found.');
+                    res.status(401).end();
+                }
             })
         });
     } else {
