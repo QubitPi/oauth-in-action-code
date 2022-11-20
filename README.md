@@ -27,6 +27,12 @@ Each component is set up to run on a different port on localhost, in a separate 
 
   ![Error loading client-js.png](./protectedResource-js.png)
 
+> - protected resource and authorization server share a [file-based NoSQL db](https://www.npmjs.com/package/nosql)
+>   located in the same directory. The file name is "database.nosql". Note that editing this file by hand is dangerous 
+>   while the system is running. Luckily, resetting the database is as simple as deleting the "database.nosql" file and 
+>   restarting the programs. Note that this file isn't created until the authorization server stores a token in it the 
+>   first time, and its contents are reset every time the authorization server is restarted.
+
 All of the applications have been set up to serve static files such as images and Cascading Style Sheets (CSS). These
 are included in the `files` directory. In addition, there are HTML templates in the `files` directory. These are used in 
 the applications to generate HTML pages based on variable inputs. When templates are used, they are set up at the
@@ -37,12 +43,6 @@ app.engine('html', cons.underscore);
 app.set('view engine', 'html');
 app.set('views', 'files');
 ```
-
-
-Useful JavaScript Libraries in This Project
--------------------------------------------
-
-- [nosql](https://www.npmjs.com/package/nosql)
 
 
 License
