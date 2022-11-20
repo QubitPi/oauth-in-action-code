@@ -48,7 +48,6 @@ var getUser = function(username) {
 };
 
 var userInfo = {
-
     "alice": {
         "sub": "9XE3-JI34-00132A",
         "preferred_username": "alice",
@@ -81,7 +80,6 @@ app.get('/', function(req, res) {
 });
 
 app.get("/authorize", function(req, res){
-
     var client = getClient(req.query.client_id);
 
     if (!client) {
@@ -93,7 +91,6 @@ app.get("/authorize", function(req, res){
         res.render('error', {error: 'Invalid redirect URI'});
         return;
     } else {
-
         var rscope = req.query.scope ? req.query.scope.split(' ') : undefined;
         var cscope = client.scope ? client.scope.split(' ') : undefined;
         if (__.difference(rscope, cscope).length > 0) {
@@ -113,11 +110,9 @@ app.get("/authorize", function(req, res){
         res.render('approve', {client: client, reqid: reqid, scope: rscope});
         return;
     }
-
 });
 
 app.post('/approve', function(req, res) {
-
     var reqid = req.body.reqid;
     var query = requests[reqid];
     delete requests[reqid];
@@ -214,7 +209,6 @@ app.post('/approve', function(req, res) {
         res.redirect(url.format(urlParsed));
         return;
     }
-
 });
 
 var generateTokens = function (req, res, clientId, user, scope, nonce, generateRefreshToken) {
@@ -249,7 +243,6 @@ var generateTokens = function (req, res, clientId, user, scope, nonce, generateR
 };
 
 app.post("/token", function(req, res){
-
     var auth = req.headers['authorization'];
     if (auth) {
         // check the auth header
@@ -392,4 +385,3 @@ var server = app.listen(9001, 'localhost', function () {
 
   console.log('OAuth Authorization Server is listening at http://%s:%s', host, port);
 });
- 

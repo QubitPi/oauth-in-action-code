@@ -47,7 +47,6 @@ app.get('/', function (req, res) {
 });
 
 app.get('/authorize', function(req, res){
-
     access_token = null;
     refresh_token = null;
     scope = null;
@@ -66,7 +65,6 @@ app.get('/authorize', function(req, res){
 });
 
 app.get("/callback", function(req, res){
-
     if (req.query.error) {
         // it's an error response, act accordingly
         res.render('error', {error: req.query.error});
@@ -123,7 +121,6 @@ app.get("/callback", function(req, res){
 });
 
 app.get('/fetch_resource', function(req, res) {
-
     console.log('Making request with access token %s', access_token);
 
     var headers = {
@@ -144,8 +141,6 @@ app.get('/fetch_resource', function(req, res) {
         res.render('error', {error: 'Server returned response code: ' + resource.statusCode});
         return;
     }
-
-
 });
 
 app.use('/', express.static('files/client'));
@@ -155,4 +150,3 @@ var server = app.listen(9000, 'localhost', function () {
   var port = server.address().port;
   console.log('OAuth Client is listening at http://%s:%s', host, port);
 });
- 
