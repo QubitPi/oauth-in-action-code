@@ -1,3 +1,6 @@
+OAuth 2 Study Project
+=====================
+
 A set of start-from-scratch OAuth applications in JavaScript using the [Express.js](http://expressjs.com/) web
 application framework running on [Node.js](https://nodejs.org/), a server-side JavaScript engine.
 
@@ -35,4 +38,8 @@ app.set('view engine', 'html');
 app.set('views', 'files');
 ```
 
-Useful Javascript 
+
+Useful JavaScript Libraries in This Project
+-------------------------------------------
+
+- [nosql](https://www.npmjs.com/package/nosql)
