@@ -8,15 +8,15 @@
     <title>OAuth in Action: OAuth Authorization Server</title>
 
     <!-- Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-	<style>
-	body {
-	  padding-top: 60px;
-	}
-	.navbar-inverse {
-		background-color: #322;
-	}
-	</style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <style>
+    body {
+      padding-top: 60px;
+    }
+    .navbar-inverse {
+        background-color: #322;
+    }
+    </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -37,29 +37,17 @@
     <div class="container">
 
       <div class="jumbotron">
-		  <h2>Client information:</h2>
-		  <% _.each(clients, function(client) { %>
-		  <ul>
-			  <li><b>client_id:</b> <code><%- client.client_id %></code></li>
-			  <li><b>client_secret:</b> <code><%- client.client_secret %></code></li>
-			  <li><b>scope:</b> <code><%- client.scope %></code></li>
-			  <li><b>redirect_uri:</b> <code><%- client.redirect_uris %></code></li>
-		   </ul>
-		   <% }); %>
-		   <h2>Server information:</h2>
-		  <ul>
-			  <li><b>authorization_endpoint:</b> <code><%- authServer.authorizationEndpoint %></code></li>
-			  <li><b>token_endpoint:</b> <code><%- authServer.tokenEndpoint %></code></li>
-		   </ul>
+          <h2 class="text-danger">Error</h2>
+          <%- error %>
       </div>
 
     </div><!-- /.container -->
 
-	
-	
+
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>

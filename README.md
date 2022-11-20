@@ -1,15 +1,36 @@
-# OAuth 2 in Action
+A set of start-from-scratch OAuth applications in JavaScript using the [Express.js](http://expressjs.com/) web
+application framework running on [Node.js](https://nodejs.org/), a server-side JavaScript engine.
 
-![Cover of OAuth 2 in Action](https://images.manning.com/255/340/resize/book/e/14336f9-6493-46dc-938c-11a34c9d20ac/Richer-OAuth2-HI.png)
+We are only making use of library code for non-OAuth-specific functionality to avoid complicated dependencies
 
-https://www.manning.com/books/oauth-2-in-action
+```bash
+npm install
+node client.js
+node authorizationServer.js
+node protectedResource.js
+```
 
-## About the book
+Each component is set up to run on a different port on localhost, in a separate process:
 
-Think of OAuth 2 like the web version of a valet key. This HTTP-based security protocol allows the users of a service to enable applications to use that service on their behalf without handing over full control. Web and mobile apps can securely access information from other servers for these users, enabling you to give your users functionality and services from other sites. Instead of unsafe password-sharing, OAuth offers a much more secure delegation protocol. OAuth is used everywhere, from large providers like Facebook and Google, to small APIs at startups, and even cloud services, it’s the worldwide standard. OAuth 2 is the must-know security protocol on the web today.
+- The OAuth Client application (client.js) runs on http://localhost:9000/
 
-OAuth 2 in Action teaches you practical use and deployment of this protocol from the perspective of a client, authorization server, and resource server. You’ll begin with an overview of OAuth and a look at its components and interactions. Then, using lots of hands-on examples, you’ll build your first OAuth client, followed by an authorization server, and then a protected resource. The second part of the book dives into crucial implementation vulnerability topics. Then you learn about tokens, dynamic client registration, and more advanced topics. This book teaches you to how to distinguish between different OAuth options and choose the right set for your application. By the end of this book, you’ll be able to build and deploy applications that use OAuth on both the client and server sides.
+  ![Error loading client-js.png](./client-js.png)
 
-## About the authors
+- The OAuth Authorization Server application (authorizationServer.js) runs on http://localhost:9001/
 
-Justin Richer is a systems architect, software engineer, standards editor, and service designer working as an independent consultant. [Antonio Sanso](http://blog.intothesymmetry.com/) works as Security Software Engineer, he is a vulnerability security researcher and an active open source contributor.
+  ![Error loading client-js.png](./authorizationServer-js.png)
+
+- The OAuth Protected Resource Application (protectedResource.js) runs on http://localhost:9002/
+
+  ![Error loading client-js.png](./protectedResource-js.png)
+
+All of the applications have been set up to serve static files such as images and Cascading Style Sheets (CSS). These
+are included in the `files` directory. In addition, there are HTML templates in the `files` directory. These are used
+in the applications to generate HTML pages based on variable inputs. When templates are used, they are set up at the
+beginning of the application with the following code:
+
+```javascript
+app.engine('html', cons.underscore);
+app.set('view engine', 'html');
+app.set('views', 'files');
+```
