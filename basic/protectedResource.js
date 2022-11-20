@@ -52,13 +52,11 @@ var getAccessToken = function(req, res, next) {
 
 app.options('/resource', cors());
 app.post("/resource", cors(), getAccessToken, function(req, res){
-
     if (req.access_token) {
         res.json(resource);
     } else {
         res.status(401).end();
     }
-
 });
 
 var server = app.listen(9002, 'localhost', function () {

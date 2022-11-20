@@ -47,7 +47,6 @@ app.get('/', function(req, res) {
 });
 
 app.get("/authorize", function(req, res){
-
     var client = getClient(req.query.client_id);
 
     if (!client) {
@@ -79,11 +78,9 @@ app.get("/authorize", function(req, res){
         res.render('approve', {client: client, reqid: reqid, scope: rscope});
         return;
     }
-
 });
 
 app.post('/approve', function(req, res) {
-
     var reqid = req.body.reqid;
     var query = requests[reqid];
     delete requests[reqid];
@@ -143,11 +140,9 @@ app.post('/approve', function(req, res) {
         res.redirect(url.format(urlParsed));
         return;
     }
-
 });
 
 app.post("/token", function(req, res){
-
     var auth = req.headers['authorization'];
     if (auth) {
         // check the auth header
