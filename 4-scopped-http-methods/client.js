@@ -66,7 +66,6 @@ app.get('/authorize', function(req, res){
 });
 
 app.get("/callback", function(req, res){
-
     if (req.query.error) {
         // it's an error response, act accordingly
         res.render('error', {error: req.query.error});
@@ -128,7 +127,6 @@ app.get('/words', function (req, res) {
 });
 
 app.get('/get_words', function (req, res) {
-
     var headers = {
         'Authorization': 'Bearer ' + access_token,
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -146,13 +144,9 @@ app.get('/get_words', function (req, res) {
         res.render('words', {words: '', timestamp: 0, result: 'noget'});
         return;
     }
-
-
-
 });
 
 app.get('/add_word', function (req, res) {
-
     var headers = {
         'Authorization': 'Bearer ' + access_token,
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -171,12 +165,9 @@ app.get('/add_word', function (req, res) {
         res.render('words', {words: '', timestamp: 0, result: 'noadd'});
         return;
     }
-
-
 });
 
 app.get('/delete_word', function (req, res) {
-
     var headers = {
         'Authorization': 'Bearer ' + access_token,
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -193,16 +184,12 @@ app.get('/delete_word', function (req, res) {
         res.render('words', {words: '', timestamp: 0, result: 'norm'});
         return;
     }
-
-
 });
-
 
 app.use('/', express.static('files/client'));
 
 var server = app.listen(9000, 'localhost', function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log('OAuth Client is listening at http://%s:%s', host, port);
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log('OAuth Client is listening at http://%s:%s', host, port);
 });
- 

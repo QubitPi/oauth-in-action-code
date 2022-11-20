@@ -278,7 +278,6 @@ app.post("/token", function(req, res) {
     }
 
     if (req.body.grant_type == 'authorization_code') {
-
         var code = codes[req.body.code];
 
         if (code) {
@@ -321,30 +320,30 @@ app.post("/token", function(req, res) {
         return;
 
     } else if (req.body.grant_type == 'refresh_token') {
-    nosql.find().make(function(builder) {
-      builder.where('refresh_token', req.body.refresh_token);
-      builder.callback(function(err, tokens) {
-            if (tokens.length == 1) {
-                var token = tokens[0];
-                if (token.client_id != clientId) {
-                    console.log('Invalid client using a refresh token, expected %s got %s', token.client_id, clientId);
-                    nosql.remove().make(function(builder) { builder.where('refresh_token', req.body.refresh_token); });
-                    res.status(400).end();
-                    return
+        nosql.find().make(function(builder) {
+            builder.where('refresh_token', req.body.refresh_token);
+            builder.callback(function(err, tokens) {
+                if (tokens.length == 1) {
+                    var token = tokens[0];
+                    if (token.client_id != clientId) {
+                        console.log('Invalid client using a refresh token, expected %s got %s', token.client_id, clientId);
+                        nosql.remove().make(function(builder) { builder.where('refresh_token', req.body.refresh_token); });
+                        res.status(400).end();
+                        return
+                    }
+                    console.log("We found a matching token: %s", req.body.refresh_token);
+                    var access_token = randomstring.generate();
+                    var token_response = { access_token: access_token, token_type: 'Bearer',  refresh_token: req.body.refresh_token };
+                    nosql.insert({ access_token: access_token, client_id: clientId });
+                    console.log('Issuing access token %s for refresh token %s', access_token, req.body.refresh_token);
+                    res.status(200).json(token_response);
+                    return;
+                } else {
+                    console.log('No matching token was found.');
+                    res.status(401).end();
                 }
-                console.log("We found a matching token: %s", req.body.refresh_token);
-                var access_token = randomstring.generate();
-                var token_response = { access_token: access_token, token_type: 'Bearer',  refresh_token: req.body.refresh_token };
-                nosql.insert({ access_token: access_token, client_id: clientId });
-                console.log('Issuing access token %s for refresh token %s', access_token, req.body.refresh_token);
-                res.status(200).json(token_response);
-                return;
-            } else {
-                console.log('No matching token was found.');
-                res.status(401).end();
-            }
-      })
-    });
+            })
+        });
     } else if (req.body.grant_type == 'password') {
         var username = req.body.username;
         var user = getUser(username);
@@ -385,4 +384,3 @@ var server = app.listen(9001, 'localhost', function () {
 
   console.log('OAuth Authorization Server is listening at http://%s:%s', host, port);
 });
- 
