@@ -1,6 +1,15 @@
 OAuth 2 Study Project
 =====================
 
+1. [Basic Client + Auth Server + Resource Server](./1-basic)
+2. [Refresh access token](./2-refresh-accessd-token)
+3. [Parsing token in resource server](./3-parsing-token-in-resource-server)
+4. [Different kinds of HTTP methods require different scopes in order for the call to be successful](./4-scopped-http-methods)
+
+
+Introduction
+------------
+
 A set of start-from-scratch OAuth applications in JavaScript using the [Express.js](http://expressjs.com/) web
 application framework running on [Node.js](https://nodejs.org/), a server-side JavaScript engine.
 
