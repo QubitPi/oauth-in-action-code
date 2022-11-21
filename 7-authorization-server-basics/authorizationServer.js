@@ -29,8 +29,7 @@ var clients = [
     {
         "client_id": "oauth-client-1",
         "client_secret": "oauth-client-secret-1",
-        "redirect_uris": ["http://localhost:9000/callback"],
-        "scope": "foo bar"
+        "redirect_uris": ["http://localhost:9000/callback"]
     }
 ];
 
@@ -58,23 +57,11 @@ app.get("/authorize", function(req, res){
         res.render('error', {error: 'Invalid redirect URI'});
         return;
     } else {
-        var rscope = req.query.scope ? req.query.scope.split(' ') : undefined;
-        var cscope = client.scope ? client.scope.split(' ') : undefined;
-        if (__.difference(rscope, cscope).length > 0) {
-            // client asked for a scope it couldn't have
-            var urlParsed = url.parse(req.query.redirect_uri);
-            delete urlParsed.search; // this is a weird behavior of the URL library
-            urlParsed.query = urlParsed.query || {};
-            urlParsed.query.error = 'invalid_scope';
-            res.redirect(url.format(urlParsed));
-            return;
-        }
-
         var reqid = randomstring.generate(8);
 
         requests[reqid] = req.query;
 
-        res.render('approve', {client: client, reqid: reqid, scope: rscope});
+        res.render('approve', {client: client, reqid: reqid });
         return;
     }
 });
@@ -95,48 +82,29 @@ app.post('/approve', function(req, res) {
             // user approved access
             var code = randomstring.generate(8);
 
-            var user = req.body.user;
-
-            var scope = __.filter(__.keys(req.body), function(s) { return __.string.startsWith(s, 'scope_'); })
-                .map(function(s) { return s.slice('scope_'.length); });
-            var client = getClient(query.client_id);
-            var cscope = client.scope ? client.scope.split(' ') : undefined;
-            if (__.difference(scope, cscope).length > 0) {
-                // client asked for a scope it couldn't have
-                var urlParsed = url.parse(query.redirect_uri);
-                delete urlParsed.search; // this is a weird behavior of the URL library
-                urlParsed.query = urlParsed.query || {};
-                urlParsed.query.error = 'invalid_scope';
-                res.redirect(url.format(urlParsed));
-                return;
-            }
-
             // save the code and request for later
-            codes[code] = { authorizationEndpointRequest: query, scope: scope, user: user };
+            codes[code] = { request: query };
 
-            var urlParsed =url.parse(query.redirect_uri);
-            delete urlParsed.search; // this is a weird behavior of the URL library
-            urlParsed.query = urlParsed.query || {};
-            urlParsed.query.code = code;
-            urlParsed.query.state = query.state;
-            res.redirect(url.format(urlParsed));
+            var urlParsed = buildUrl(query.redirect_uri, {
+                code: code,
+                state: query.state
+            });
+            res.redirect(urlParsed);
             return;
         } else {
             // we got a response type we don't understand
-            var urlParsed =url.parse(query.redirect_uri);
-            delete urlParsed.search; // this is a weird behavior of the URL library
-            urlParsed.query = urlParsed.query || {};
-            urlParsed.query.error = 'unsupported_response_type';
-            res.redirect(url.format(urlParsed));
+            var urlParsed = buildUrl(query.redirect_uri, {
+                error: 'unsupported_response_type'
+            });
+            res.redirect(urlParsed);
             return;
         }
     } else {
         // user denied access
-        var urlParsed =url.parse(query.redirect_uri);
-        delete urlParsed.search; // this is a weird behavior of the URL library
-        urlParsed.query = urlParsed.query || {};
-        urlParsed.query.error = 'access_denied';
-        res.redirect(url.format(urlParsed));
+        var urlParsed = buildUrl(query.redirect_uri, {
+            error: 'access_denied'
+        });
+        res.redirect(urlParsed);
         return;
     }
 });
@@ -145,9 +113,9 @@ app.post("/token", function(req, res){
     var auth = req.headers['authorization'];
     if (auth) {
         // check the auth header
-        var clientCredentials = Buffer.from(auth.slice('basic '.length), 'base64').toString().split(':');
-        var clientId = querystring.unescape(clientCredentials[0]);
-        var clientSecret = querystring.unescape(clientCredentials[1]);
+        var clientCredentials = decodeClientCredentials(auth);
+        var clientId = clientCredentials.id;
+        var clientSecret = clientCredentials.secret;
     }
 
     // otherwise, check the post body
@@ -181,28 +149,21 @@ app.post("/token", function(req, res){
 
         if (code) {
             delete codes[req.body.code]; // burn our code, it's been used
-            if (code.authorizationEndpointRequest.client_id == clientId) {
+            if (code.request.client_id == clientId) {
 
                 var access_token = randomstring.generate();
-
-                var cscope = null;
-                if (code.scope) {
-                    cscope = code.scope.join(' ')
-                }
-
-                nosql.insert({ access_token: access_token, client_id: clientId, scope: cscope });
+                nosql.insert({ access_token: access_token, client_id: clientId });
 
                 console.log('Issuing access token %s', access_token);
-                console.log('with scope %s', cscope);
 
-                var token_response = { access_token: access_token, token_type: 'Bearer',  scope: cscope };
+                var token_response = { access_token: access_token, token_type: 'Bearer' };
 
                 res.status(200).json(token_response);
                 console.log('Issued tokens for code %s', req.body.code);
 
                 return;
             } else {
-                console.log('Client mismatch, expected %s got %s', code.authorizationEndpointRequest.client_id, clientId);
+                console.log('Client mismatch, expected %s got %s', code.request.client_id, clientId);
                 res.status(400).json({error: 'invalid_grant'});
                 return;
             }
@@ -217,9 +178,32 @@ app.post("/token", function(req, res){
     }
 });
 
+var buildUrl = function(base, options, hash) {
+    var newUrl = url.parse(base, true);
+    delete newUrl.search;
+    if (!newUrl.query) {
+        newUrl.query = {};
+    }
+    __.each(options, function(value, key, list) {
+        newUrl.query[key] = value;
+    });
+    if (hash) {
+        newUrl.hash = hash;
+    }
+
+    return url.format(newUrl);
+};
+
+var decodeClientCredentials = function(auth) {
+    var clientCredentials = Buffer.from(auth.slice('basic '.length), 'base64').toString().split(':');
+    var clientId = querystring.unescape(clientCredentials[0]);
+    var clientSecret = querystring.unescape(clientCredentials[1]);
+    return { id: clientId, secret: clientSecret };
+};
+
 app.use('/', express.static('files/authorizationServer'));
 
-// clear the database on startup
+// clear the database
 nosql.clear();
 
 var server = app.listen(9001, 'localhost', function () {
@@ -228,3 +212,4 @@ var server = app.listen(9001, 'localhost', function () {
 
     console.log('OAuth Authorization Server is listening at http://%s:%s', host, port);
 });
+ 
