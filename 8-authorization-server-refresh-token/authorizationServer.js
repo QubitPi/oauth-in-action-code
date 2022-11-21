@@ -26,7 +26,6 @@ var authServer = {
 
 // client information
 var clients = [
-
     {
         "client_id": "oauth-client-1",
         "client_secret": "oauth-client-secret-1",
@@ -47,7 +46,6 @@ app.get('/', function(req, res) {
 });
 
 app.get("/authorize", function(req, res){
-
     var client = getClient(req.query.client_id);
 
     if (!client) {
@@ -67,11 +65,9 @@ app.get("/authorize", function(req, res){
         res.render('approve', {client: client, reqid: reqid });
         return;
     }
-
 });
 
 app.post('/approve', function(req, res) {
-
     var reqid = req.body.reqid;
     var query = requests[reqid];
     delete requests[reqid];
@@ -112,7 +108,6 @@ app.post('/approve', function(req, res) {
         res.redirect(urlParsed);
         return;
     }
-
 });
 
 app.post("/token", function(request, response){

@@ -35,7 +35,6 @@ var rsaKey = {
 };
 
 // client information
-
 var client = {
     "client_id": "oauth-client-1",
     "client_secret": "oauth-client-secret-1",
