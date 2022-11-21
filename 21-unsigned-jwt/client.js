@@ -59,7 +59,6 @@ app.get('/', function (req, res) {
 });
 
 app.get('/authorize', function(req, res){
-
 	access_token = null;
 	refresh_token = null;
 	scope = null;
@@ -78,7 +77,6 @@ app.get('/authorize', function(req, res){
 });
 
 app.get("/callback", function(req, res){
-
 	if (req.query.error) {
 		// it's an error response, act accordingly
 		res.render('error', {error: req.query.error});
@@ -136,7 +134,6 @@ app.get("/callback", function(req, res){
 });
 
 app.get('/fetch_resource', function(req, res) {
-
 	if (!access_token) {
 		res.render('error', {error: 'Missing access token.'});
 		return;
@@ -152,6 +149,8 @@ app.get('/fetch_resource', function(req, res) {
 	var resource = request('POST', protectedResource,
 		{headers: headers}
 	);
+
+	console.log("status code = " + resource.statusCode)
 	
 	if (resource.statusCode >= 200 && resource.statusCode < 300) {
 		var body = JSON.parse(resource.getBody());
@@ -194,8 +193,7 @@ var encodeClientCredentials = function(clientId, clientSecret) {
 };
 
 var server = app.listen(9000, 'localhost', function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log('OAuth Client is listening at http://%s:%s', host, port);
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log('OAuth Client is listening at http://%s:%s', host, port);
 });
- 
