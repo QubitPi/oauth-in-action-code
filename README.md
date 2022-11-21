@@ -18,7 +18,8 @@ application framework running on [Node.js](https://nodejs.org/), a server-side J
 
 3. Authorization Server
 
-   - [Authorization Server Basics](./7-authorization-server-basics)
+   - [Authorization server basics](./7-authorization-server-basics)
+   - [Refresh token](./8-authorization-server-refresh-token)
 
 To run each module, `cd` into that module and start all components by
 
