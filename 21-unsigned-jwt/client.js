@@ -152,6 +152,8 @@ app.get('/fetch_resource', function(req, res) {
 	var resource = request('POST', protectedResource,
 		{headers: headers}
 	);
+
+	console.log("status code = " + resource.statusCode)
 	
 	if (resource.statusCode >= 200 && resource.statusCode < 300) {
 		var body = JSON.parse(resource.getBody());

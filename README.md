@@ -21,6 +21,10 @@ application framework running on [Node.js](https://nodejs.org/), a server-side J
    - [Authorization server basics](./7-authorization-server-basics)
    - [Refresh token](./8-authorization-server-refresh-token)
 
+4. JWT
+
+   - [Unsigned JWT](./21-unsigned-jwt)
+
 To run each module, `cd` into that module and start all components by
 
 ```bash
