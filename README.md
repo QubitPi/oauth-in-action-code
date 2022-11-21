@@ -1,26 +1,31 @@
 OAuth 2 Study Project
 =====================
 
+
+Study Modules
+-------------
+
 1. [Basic Client + Auth Server + Resource Server](./1-basic)
 2. [Refresh access token](./2-refresh-accessd-token)
 3. [Parsing token in resource server](./3-parsing-token-in-resource-server)
 4. [Different kinds of HTTP methods require different scopes in order for the call to be successful](./4-scopped-http-methods)
+5. [Different information returned from the same handler depending on which scopes are present in token](./5-different-scopes-for-different-data-results)
+
+To run each module, `cd` into that module and run
+
+```bash
+npm install
+node client.js & node authorizationServer.js & node protectedResource.js
+```
 
 
-Introduction
-------------
+Study Notes
+-----------
 
 A set of start-from-scratch OAuth applications in JavaScript using the [Express.js](http://expressjs.com/) web
 application framework running on [Node.js](https://nodejs.org/), a server-side JavaScript engine.
 
 We are only making use of library code for non-OAuth-specific functionality to avoid complicated dependencies
-
-```bash
-npm install
-node client.js
-node authorizationServer.js
-node protectedResource.js
-```
 
 Each component is set up to run on a different port on localhost, in a separate process:
 
