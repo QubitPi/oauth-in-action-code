@@ -172,7 +172,6 @@ app.post('/approve', function(req, res) {
 });
 
 app.post("/token", function(request, response) {
-
     var auth = request.headers['authorization'];
     if (auth) {
         // check the auth header
@@ -328,4 +327,3 @@ var server = app.listen(9001, 'localhost', function () {
 
     console.log('OAuth Authorization Server is listening at http://%s:%s', host, port);
 });
- 

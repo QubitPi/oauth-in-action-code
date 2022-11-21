@@ -119,4 +119,3 @@ var server = app.listen(9002, 'localhost', function () {
 
     console.log('OAuth Resource Server is listening at http://%s:%s', host, port);
 });
-
