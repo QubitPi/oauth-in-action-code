@@ -25,6 +25,8 @@ application framework running on [Node.js](https://nodejs.org/), a server-side J
 
    - [Unsigned JWT](./21-unsigned-jwt)
 
+5. [Authentication with OpenID Connect](./28-openid-connect)
+
 To run each module, `cd` into that module and start all components by
 
 ```bash
