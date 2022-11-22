@@ -1,3 +1,21 @@
+Everything under "docs" directory are auto generated except for
+
+* intro.md
+* openid-connect
+
+To build site:
+
+```bash
+make && make clean
+```
+
+Start the site locally:
+
+```bash
+npm install
+npx docusaurus start
+```
+
 # Website
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
