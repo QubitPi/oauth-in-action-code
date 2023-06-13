@@ -1,0 +1,8 @@
+{
+    "label": "OpenID Connect Basics",
+    "position": 2,
+    "link": {
+        "type": "generated-index",
+        "description": "OpenID Connect has become the leading standard for single sign-on and identity provision on the Internet. Its formula for success: simple JSON-based identity tokens (JWT), delivered via OAuth 2.0 flows designed for web, browser-based and native / mobile applications."
+    }
+}
